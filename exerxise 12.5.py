@@ -12,12 +12,19 @@ except:
     exit()
 
 data = b''
+count = 0
 while True:
-    curdata = mysock.recv(512)
+    curdata = mysock.recv(5120)
     if len(curdata) < 1:
         break
+    count += len(curdata)
+    print(len(curdata), count)
     data += curdata
 
 mysock.close()
-mydata = data.decode()
-print(mydata)
+
+pos = data.decode().find('\r\n\r\n')
+#print('Header length: ', pos)
+#print(data[:pos].decode())
+mydata = data[pos+4:]
+print(mydata.decode())
